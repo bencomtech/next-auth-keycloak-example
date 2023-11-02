@@ -64,18 +64,24 @@ export default NextAuth({
         session.user = token.user;
         session.error = token.error;
         session.access_token = token.access_token;
+        session.branch_code = token.branch_code;
+        session.role_code = token.role_code;
       }
 
       return session;
     },
-    async jwt({ token, user, account }) {
-      if (account && user) {
+    async jwt({ token, user, account, profile }) {
+      if (account && user && profile) {
         token.access_token = account.access_token!;
         token.refresh_token = account.refresh_token!;
         token.access_token_expired =
           Date.now() + (account.expires_at! - 15) * 1000;
         token.refresh_token_expired =
           Date.now() + (account.refresh_expires_in! - 15) * 1000;
+        token.branch_code = profile.branch_code;
+        token.role_code = profile.role_code;
+
+        user.employee_code = profile.employee_code;
         token.user = user;
       }
 
