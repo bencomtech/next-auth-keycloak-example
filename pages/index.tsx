@@ -7,7 +7,7 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const loading = status === "loading";
 
-  console.log(session);
+  console.log("status: ", loading);
 
   return (
     <div className={styles.container}>
@@ -49,11 +49,13 @@ const Home: NextPage = () => {
               <strong>{session.user.email ?? session.user.name}</strong>
             </span>
             <a
-              href={`/api/auth/signout`}
+              href={`/api/auth/logout`}
               className={styles.button}
               onClick={(e) => {
                 e.preventDefault();
-                signOut();
+                signOut({
+                  callbackUrl: `/api/auth/logout`,
+                });
               }}
             >
               Sign out
